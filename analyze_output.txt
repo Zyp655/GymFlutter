@@ -1,0 +1,14 @@
+Analyzing lib...                                                
+
+  error - Expected to find ':' - lib\presentation\screens\booking_screen.dart:352:44 - expected_token
+  error - Undefined name 'MMM' - lib\presentation\screens\booking_screen.dart:352:44 - undefined_identifier
+  error - Expected to find ',' - lib\presentation\screens\booking_screen.dart:352:48 - expected_token
+  error - Too many positional arguments: 1 expected, but 2 found - lib\presentation\screens\booking_screen.dart:352:48 - extra_positional_arguments_could_be_named
+  error - Undefined name 'dd' - lib\presentation\screens\booking_screen.dart:352:48 - undefined_identifier
+  error - Expected an identifier - lib\presentation\screens\booking_screen.dart:352:50 - missing_identifier
+  error - Expected to find ',' - lib\presentation\screens\booking_screen.dart:352:50 - expected_token
+  error - The named parameter '' isn't defined - lib\presentation\screens\booking_screen.dart:353:17 - undefined_named_parameter
+warning - The declaration '_formatDate' isn't referenced - lib\presentation\screens\profile_screen.dart:402:10 - unused_element
+warning - The value of the local variable 'months' isn't used - lib\presentation\screens\profile_screen.dart:404:11 - unused_local_variable
+warning - The value of the local variable 'hours' isn't used - lib\presentation\widgets\gym_detail_widgets.dart:410:29 - unused_local_variable
+
