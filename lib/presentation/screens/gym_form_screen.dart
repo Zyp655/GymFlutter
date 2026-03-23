@@ -2,8 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:latlong2/latlong.dart';
+import 'location_picker_screen.dart';
+import '../widgets/goong_map_layer.dart';
 import '../../l10n/app_localizations.dart';
 import '../../core/di/injection_container.dart';
 import '../../core/utils/validators.dart';
@@ -30,10 +34,10 @@ class _GymFormScreenState extends State<GymFormScreen> {
   late final TextEditingController _emailController;
   late final TextEditingController _descriptionController;
   late final TextEditingController _imageUrlController;
-
-  late final TextEditingController _latitudeController;
-  late final TextEditingController _longitudeController;
   late final TextEditingController _openingHoursController;
+
+  double _selectedLatitude = 0;
+  double _selectedLongitude = 0;
 
   final List<String> _selectedFacilities = [];
 
@@ -65,9 +69,6 @@ class _GymFormScreenState extends State<GymFormScreen> {
     _emailController = TextEditingController();
     _descriptionController = TextEditingController();
     _imageUrlController = TextEditingController();
-
-    _latitudeController = TextEditingController();
-    _longitudeController = TextEditingController();
     _openingHoursController = TextEditingController();
   }
 
@@ -79,9 +80,6 @@ class _GymFormScreenState extends State<GymFormScreen> {
     _emailController.dispose();
     _descriptionController.dispose();
     _imageUrlController.dispose();
-
-    _latitudeController.dispose();
-    _longitudeController.dispose();
     _openingHoursController.dispose();
     super.dispose();
   }
@@ -95,10 +93,9 @@ class _GymFormScreenState extends State<GymFormScreen> {
       _emailController.text = gym.email;
       _descriptionController.text = gym.description;
       _imageUrlController.text = gym.imageUrl;
-
-      _latitudeController.text = gym.latitude.toString();
-      _longitudeController.text = gym.longitude.toString();
       _openingHoursController.text = gym.openingHours;
+      _selectedLatitude = gym.latitude;
+      _selectedLongitude = gym.longitude;
       _selectedFacilities.clear();
       _selectedFacilities.addAll(gym.facilities);
     }
@@ -319,39 +316,7 @@ class _GymFormScreenState extends State<GymFormScreen> {
             textInputAction: TextInputAction.next,
           ),
           const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: TextFormField(
-                  controller: _latitudeController,
-                  decoration: InputDecoration(
-                    labelText: l10n.latitude,
-                    prefixIcon: const Icon(Icons.my_location),
-                  ),
-                  keyboardType: const TextInputType.numberWithOptions(
-                    decimal: true,
-                    signed: true,
-                  ),
-                  textInputAction: TextInputAction.next,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: TextFormField(
-                  controller: _longitudeController,
-                  decoration: InputDecoration(
-                    labelText: l10n.longitude,
-                    prefixIcon: const Icon(Icons.my_location),
-                  ),
-                  keyboardType: const TextInputType.numberWithOptions(
-                    decimal: true,
-                    signed: true,
-                  ),
-                  textInputAction: TextInputAction.done,
-                ),
-              ),
-            ],
-          ),
+          _buildLocationPicker(colorScheme),
           const SizedBox(height: 24),
           _buildSectionHeader(colorScheme, l10n.facilities, Icons.category),
           const SizedBox(height: 16),
@@ -467,6 +432,108 @@ class _GymFormScreenState extends State<GymFormScreen> {
     );
   }
 
+  Future<void> _openLocationPicker() async {
+    final result = await Navigator.of(context).push<LocationPickerResult>(
+      MaterialPageRoute(
+        builder: (_) => LocationPickerScreen(
+          initialLatitude: _selectedLatitude,
+          initialLongitude: _selectedLongitude,
+        ),
+      ),
+    );
+    if (result != null) {
+      setState(() {
+        _selectedLatitude = result.latitude;
+        _selectedLongitude = result.longitude;
+        if (result.address.isNotEmpty && _addressController.text.isEmpty) {
+          _addressController.text = result.address;
+        }
+      });
+    }
+  }
+
+  Widget _buildLocationPicker(ColorScheme colorScheme) {
+    final hasLocation = _selectedLatitude != 0 && _selectedLongitude != 0;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        OutlinedButton.icon(
+          onPressed: _openLocationPicker,
+          icon: Icon(
+            hasLocation ? Icons.edit_location_alt : Icons.add_location_alt,
+          ),
+          label: Text(hasLocation ? 'Thay đổi vị trí' : 'Chọn vị trí trên bản đồ'),
+          style: OutlinedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 14),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            side: BorderSide(color: colorScheme.primary),
+          ),
+        ),
+        if (hasLocation) ...[
+          const SizedBox(height: 12),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: SizedBox(
+              height: 150,
+              child: AbsorbPointer(
+                child: FlutterMap(
+                  options: MapOptions(
+                    initialCenter: LatLng(_selectedLatitude, _selectedLongitude),
+                    initialZoom: 15,
+                    interactionOptions: const InteractionOptions(
+                      flags: InteractiveFlag.none,
+                    ),
+                  ),
+                  children: [
+                    const GoongMapLayer(),
+                    MarkerLayer(
+                      markers: [
+                        Marker(
+                          point: LatLng(_selectedLatitude, _selectedLongitude),
+                          width: 36,
+                          height: 36,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: colorScheme.primary,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: colorScheme.primary.withValues(alpha: 0.3),
+                                  blurRadius: 6,
+                                ),
+                              ],
+                            ),
+                            child: Icon(
+                              Icons.fitness_center,
+                              color: colorScheme.onPrimary,
+                              size: 16,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            '${_selectedLatitude.toStringAsFixed(6)}, ${_selectedLongitude.toStringAsFixed(6)}',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 12,
+              color: colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+
   void _submitForm(BuildContext context) {
     if (_formKey.currentState?.validate() ?? false) {
       context.read<GymFormCubit>().submitGym(
@@ -476,9 +543,8 @@ class _GymFormScreenState extends State<GymFormScreen> {
         email: _emailController.text.trim(),
         description: _descriptionController.text.trim(),
         imageUrl: _imageUrlController.text.trim(),
-
-        latitude: double.tryParse(_latitudeController.text.trim()) ?? 0,
-        longitude: double.tryParse(_longitudeController.text.trim()) ?? 0,
+        latitude: _selectedLatitude,
+        longitude: _selectedLongitude,
         openingHours: _openingHoursController.text.trim(),
         facilities: _selectedFacilities,
       );

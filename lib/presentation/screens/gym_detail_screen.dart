@@ -11,6 +11,7 @@ import '../../domain/repositories/review_repository.dart';
 import '../cubits/gym_list/gym_list_cubit.dart';
 import '../cubits/review/review_cubit.dart';
 import '../widgets/gym_detail_widgets.dart';
+import '../widgets/gym_location_card.dart';
 
 class GymDetailScreen extends StatelessWidget {
   final Gym gym;
@@ -61,6 +62,8 @@ class _GymDetailBody extends StatelessWidget {
                   GymDescriptionCard(description: gym.description),
                   const SizedBox(height: 16),
                   GymFacilitiesCard(facilities: gym.facilities),
+                  const SizedBox(height: 16),
+                  GymLocationCard(gym: gym),
                   const SizedBox(height: 16),
                   const GymStatisticsChart(),
                   const SizedBox(height: 16),

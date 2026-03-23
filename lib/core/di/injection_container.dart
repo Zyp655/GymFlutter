@@ -9,6 +9,7 @@ import '../../data/repositories/gym_repository_impl.dart';
 import '../../data/repositories/review_repository_impl.dart';
 import '../../data/repositories/user_repository_impl.dart';
 import '../../data/services/openai_service.dart';
+import '../../data/services/goong_service.dart';
 import '../../domain/repositories/gym_repository.dart';
 import '../../domain/repositories/review_repository.dart';
 import '../../domain/repositories/user_repository.dart';
@@ -46,6 +47,7 @@ Future<void> initializeDependencies() async {
   sl.registerLazySingleton<UserRepository>(() => UserRepositoryImpl());
 
   sl.registerLazySingleton<OpenAIService>(() => OpenAIService());
+  sl.registerLazySingleton<GoongService>(() => GoongService());
 
   sl.registerLazySingleton(() => GetAllGyms(sl()));
   sl.registerLazySingleton(() => GetGymById(sl()));

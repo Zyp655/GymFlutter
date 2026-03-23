@@ -1,0 +1,78 @@
+Tiles Key: Yrofo61Wj6n9IUXNkbNu5xKwFUTEFMqPhRyCRmm9
+API Key: oQsUXNviTzaqMVqfySYkI0eNsZx1o3hEUMHPZP2s
+
+--- raster @2x tiles-key ---
+URL: https://raster.goong.io/roadmap/10/820/474@2x.png?api_key=Yrofo61Wj6n9IUXNkbNu5xKwFUTEFMqPhRyCRmm9
+RESULT: ❌ Error: TimeoutException after 0:00:08.000000: Future not completed
+
+--- raster no-2x tiles-key ---
+URL: https://raster.goong.io/roadmap/10/820/474.png?api_key=Yrofo61Wj6n9IUXNkbNu5xKwFUTEFMqPhRyCRmm9
+RESULT: ❌ Error: TimeoutException after 0:00:08.000000: Future not completed
+
+--- tiles.goong tiles-key ---
+URL: https://tiles.goong.io/goong_map_web/10/820/474.png?api_key=Yrofo61Wj6n9IUXNkbNu5xKwFUTEFMqPhRyCRmm9
+Status: 404, Size: 167 bytes
+Content-Type: text/html; charset=utf-8
+RESULT: ❌ Failed
+Body: <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot GET /goong_map_web/10/820/474.png</pre>
+</body>
+</html>
+
+
+--- tiles.goong @2x tiles-key ---
+URL: https://tiles.goong.io/goong_map_web/10/820/474@2x.png?api_key=Yrofo61Wj6n9IUXNkbNu5xKwFUTEFMqPhRyCRmm9
+Status: 404, Size: 391 bytes
+Content-Type: text/html; charset=utf-8
+RESULT: ❌ Failed
+Body: <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot GET /goong_map_web/10/820/<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="407477740072386e302e27">[email&#160;protected]</a></pre>
+<script data-cfasync="false" src=
+
+--- raster @2x api-key ---
+URL: https://raster.goong.io/roadmap/10/820/474@2x.png?api_key=oQsUXNviTzaqMVqfySYkI0eNsZx1o3hEUMHPZP2s
+Status: 403, Size: 207 bytes
+Content-Type: application/json
+RESULT: ❌ Failed
+Body: {
+  "error": {
+    "code": "API_KEY_UNAUTHORIZED",
+    "message": "The api_key supplied is not authorized to access the given service. Contact us at https://raster.goong.io:443/contact/ for assistance"
+  }
+}
+
+--- raster no-2x api-key ---
+URL: https://raster.goong.io/roadmap/10/820/474.png?api_key=oQsUXNviTzaqMVqfySYkI0eNsZx1o3hEUMHPZP2s
+Status: 403, Size: 207 bytes
+Content-Type: application/json
+RESULT: ❌ Failed
+Body: {
+  "error": {
+    "code": "API_KEY_UNAUTHORIZED",
+    "message": "The api_key supplied is not authorized to access the given service. Contact us at https://raster.goong.io:443/contact/ for assistance"
+  }
+}
+
+--- tile.goong tiles-key ---
+URL: https://tile.goong.io/assets/goong_map_web/10/820/474.png?api_key=Yrofo61Wj6n9IUXNkbNu5xKwFUTEFMqPhRyCRmm9
+RESULT: ❌ Error: ClientException with SocketException: Failed host lookup: 'tile.goong.io' (OS Error: No such host is known.
+, errno = 11001), uri=https://tile.goong.io/assets/goong_map_web/10/820/474.png?api_key=Yrofo61Wj6n9IUXNkbNu5xKwFUTEFMqPhRyCRmm9
+
+--- OSM fallback ---
+URL: https://tile.openstreetmap.org/10/820/474.png
+Status: 200, Size: 6987 bytes
+Content-Type: image/png
+RESULT: ✅ WORKING!
+

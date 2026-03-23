@@ -16,6 +16,8 @@ class AppConfig {
 
   static String get appName => _safeGet('APP_NAME', 'GymFit Pro');
   static String get logLevel => _safeGet('LOG_LEVEL', 'info');
+  static String get goongApiKey => _safeGet('GOONG_API_KEY', '');
+  static String get goongMapTilesKey => _safeGet('GOONG_MAP_TILES_KEY', '');
 
   static String _safeGet(String key, String defaultValue) {
     try {
